@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link href="./../src/simptemp.css" rel="stylesheet">
+<script src="./../src/simptemp.js"></script>
+<title>test</title>
+</head>
+<body>
+<div id="result1"></div>
+<div id="result2"></div>
+<button type="button" id="execute">execute</button>
+
+<div id="example-template1" class="template">
+  <span data-simptemp-key2text="example1"></span>
+  <span data-simptemp-key2html="example1"></span>
+  <span data-simptemp-key2attr="example2"></span>
+  <span data-simptemp-key2attr="example2" data-simptemp-attrname="attr"></span>
+  <span data-simptemp-key2thistext="example1"></span>
+  <span data-simptemp-key2thishtml="example1"></span>
+</div>
+<div id="example-template2" class="template-container">
+  <span data-simptemp-key2text="example1" data-simptemp-apply="replace">exist</span>
+  <span data-simptemp-key2text="example1" data-simptemp-apply="prepend">exist</span>
+  <span data-simptemp-key2text="example1" data-simptemp-apply="append">exist</span>
+  <span data-simptemp-key2html="example1" data-simptemp-apply="replace">exist</span>
+  <span data-simptemp-key2html="example1" data-simptemp-apply="prepend">exist</span>
+  <span data-simptemp-key2html="example1" data-simptemp-apply="append">exist</span>
+  <span data-simptemp-key2attr="example2" data-simptemp-apply="replace" example2="exist"></span>
+  <span data-simptemp-key2attr="example2" data-simptemp-apply="prepend" example2="exist"></span>
+  <span data-simptemp-key2attr="example2" data-simptemp-apply="append" example2="exist"></span>
+  <span data-simptemp-key2attr="class" data-simptemp-apply="replace" class="exist"></span>
+  <span data-simptemp-key2attr="class" data-simptemp-apply="prepend" class="exist"></span>
+  <span data-simptemp-key2attr="class" data-simptemp-apply="append" class="exist"></span>
+</div>
+
+<script>
+const simptemp = new Simptemp();
+const data = [
+  {
+    "example1": "<b>foo</b><span style=\"background-color: red;\">foo</span>",
+    "example2": "aaa",
+    "class": "class1"
+  },
+  {
+    "example1": "<b>bar</b>",
+    "example2": "bbb",
+    "class": "class2"
+  }
+];
+document.getElementById('execute').addEventListener('click', function(event) {
+  let result1 = document.getElementById('result1');
+  let template1 = document.getElementById('example-template1');
+  simptemp.inflate(template1, data, result1);
+  let result2 = document.getElementById('result2');
+  let template2 = document.getElementById('example-template2');
+  simptemp.inflate(template2, data, result2);
+});
+</script>
+</body>
+</html>
