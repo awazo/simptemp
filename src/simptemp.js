@@ -17,6 +17,7 @@ const Simptemp = function() {
         if (!d.hasOwnProperty(key)) continue;
         this.bindKey(clone, key, d[key]);
       }
+      this.event.apply(clone);
       if (isContainer) {
         clone.childNodes.forEach(elm => inflated.push(elm));
       } else {
@@ -42,35 +43,33 @@ const Simptemp = function() {
   this.applyTypeDef = { 'replace': 0, 'prepend': 1, 'append': 2 };
 
   this.bindKey = function(rootElement, key, value) {
-    let simptemp = this;
-
     let selBind2Text = '[' + this.attrNameBind2Text + '=' + key + ']';
-    rootElement.querySelectorAll(selBind2Text).forEach(function(elm) {
+    rootElement.querySelectorAll(selBind2Text).forEach((elm) => {
       let textNode = document.createTextNode(value);
-      simptemp.applyData(simptemp.bindTypeDef.text, elm, key, textNode);
+      this.applyData(this.bindTypeDef.text, elm, key, textNode);
     });
 
     let selBind2Html = '[' + this.attrNameBind2Html + '=' + key + ']';
-    rootElement.querySelectorAll(selBind2Html).forEach(function(elm) {
+    rootElement.querySelectorAll(selBind2Html).forEach((elm) => {
       let htmlParent = document.createElement('div');
       htmlParent.innerHTML = value;
       let nodes = htmlParent.childNodes;
-      simptemp.applyData(simptemp.bindTypeDef.html, elm, key, nodes);
+      this.applyData(this.bindTypeDef.html, elm, key, nodes);
     });
 
     let selBind2Attr = '[' + this.attrNameBind2Attr + '=' + key + ']';
-    rootElement.querySelectorAll(selBind2Attr).forEach(function(elm) {
+    rootElement.querySelectorAll(selBind2Attr).forEach((elm) => {
       let attrName = key;
-      if (elm.hasAttribute(simptemp.attrNameAttrName)) {
-        attrName = elm.getAttribute(simptemp.attrNameAttrName);
+      if (elm.hasAttribute(this.attrNameAttrName)) {
+        attrName = elm.getAttribute(this.attrNameAttrName);
       }
-      simptemp.applyData(simptemp.bindTypeDef.attr, elm, attrName, value);
+      this.applyData(this.bindTypeDef.attr, elm, attrName, value);
     });
 
     let selBind2ThisText = '[' + this.attrNameBind2ThisText + '=' + key + ']';
-    rootElement.querySelectorAll(selBind2ThisText).forEach(function(elm) {
+    rootElement.querySelectorAll(selBind2ThisText).forEach((elm) => {
       let textNode = document.createTextNode(value);
-      simptemp.applyData(simptemp.bindTypeDef.thistext, elm, key, textNode);
+      this.applyData(this.bindTypeDef.thistext, elm, key, textNode);
     });
     let nodesThisTextRemove = rootElement.querySelectorAll(selBind2ThisText);
     for (let i = 0; i < nodesThisTextRemove.length; i++) {
@@ -78,11 +77,11 @@ const Simptemp = function() {
     }
 
     let selBind2ThisHtml = '[' + this.attrNameBind2ThisHtml + '=' + key + ']';
-    rootElement.querySelectorAll(selBind2ThisHtml).forEach(function(elm) {
+    rootElement.querySelectorAll(selBind2ThisHtml).forEach((elm) => {
       let htmlParent = document.createElement('div');
       htmlParent.innerHTML = value;
       let nodes = htmlParent.childNodes;
-      simptemp.applyData(simptemp.bindTypeDef.thishtml, elm, key, nodes);
+      this.applyData(this.bindTypeDef.thishtml, elm, key, nodes);
     });
     let nodesThisHtmlRemove = rootElement.querySelectorAll(selBind2ThisHtml);
     for (let i = 0; i < nodesThisHtmlRemove.length; i++) {
@@ -164,6 +163,31 @@ const Simptemp = function() {
       while (newNode.length > 0) parent.insertBefore(newNode[0], targetNode);
     } else {
       parent.insertBefore(newNode, targetNode);
+    }
+  };
+
+  this.event = {
+    "definitions": [],
+    "add": (selector, type, handler) => {
+      this.event.definitions[selector] = {
+        "selector": selector,
+        "type": type,
+        "handler": handler
+      };
+    },
+    "remove": (selector) => {
+      this.event.definitions.splice(this.event.definitions.indexOf(selector), 1);
+    },
+    "clear": () => {
+      this.event.definitions = [];
+    },
+    "apply": (rootNode) => {
+      for (let key of Object.keys(this.event.definitions)) {
+        let def = this.event.definitions[key];
+        rootNode.querySelectorAll(def.selector).forEach((elm) => {
+          elm.addEventListener(def.type, def.handler);
+        });
+      }
     }
   };
 };

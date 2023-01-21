@@ -9,6 +9,9 @@ javascript simple template engine
     * data is an array of object or an object
     * container is parent element for the result of inflate. it is optional, if not supplied the result of inflate (an array of elements) is returned.
 
+* if you want to add event listener in the element in the template, use `simptemp.event.add(selector, type, handler)` before call inflate.
+* CAUTION: key2html/key2thishtml uses innerHTML. so you have to [consider security](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML#security_considerations) .
+
 ## examples
 ### use `class="template"`
 if a template is:
@@ -91,10 +94,19 @@ The difference of the two classes are: template-container remove the root elemen
 * `data-simptemp-key2thishtml="datakey"`: the value of `"datakey": value` is placed as the html element and replaced this element.
 ### data applying
 * `data-simptemp-apply="replace"`: is default, replace the data to any data template has.
-    * if key2text is "example1", apply is "replace" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>value</div>`. 
+    * if key2text is "example1", apply is "replace" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>value</div>`.
 * `data-simptemp-apply="prepend": prepend the data to the value template has.
-    * if key2text is "example1", apply is "prepend" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>valuefoo</div>`. 
+    * if key2text is "example1", apply is "prepend" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>valuefoo</div>`.
 * `data-simptemp-apply="append": append the data to the value template has.
-    * if key2text is "example1", apply is "append" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>foovalue</div>`. 
+    * if key2text is "example1", apply is "append" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>foovalue</div>`.
 * If you use key2attr and attrname="class" with prepend/append, value are separated with ' ' (a space) and also any order (prepend & append are same).
+### event listener
+* `simptemp.event.definitions`: hash object; key is selector, value is `{ "selector": selector, "type": type, "handler": handler }`, build by `simptemp.event.add` function.
+* `simptemp.event.add(selector, type, handler)`: add event listener definition.
+    * selector: selector string passing to querySelectorAll, selecting from template root element.
+    * type: event type string passing to addEventListener.
+    * handler: event handler function passing to addEventListener.
+* `simptemp.event.remove(selector)`: remove event listener definition.
+* `simptemp.event.clear()`: remove all event listener definitions.
+* `simptemp.event.apply(rootNode)`: apply the event listeners in `simptemp.event.definitions` to the result of inflated, called in inflate function.
 

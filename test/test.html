@@ -18,6 +18,7 @@
   <span data-simptemp-key2attr="example2" data-simptemp-attrname="attr"></span>
   <span data-simptemp-key2thistext="example1"></span>
   <span data-simptemp-key2thishtml="example1"></span>
+  <button type="button" class="example1button">example1button</button>
 </div>
 <div id="example-template2" class="template-container">
   <span data-simptemp-key2text="example1" data-simptemp-apply="replace">exist</span>
@@ -32,6 +33,7 @@
   <span data-simptemp-key2attr="class" data-simptemp-apply="replace" class="exist"></span>
   <span data-simptemp-key2attr="class" data-simptemp-apply="prepend" class="exist"></span>
   <span data-simptemp-key2attr="class" data-simptemp-apply="append" class="exist"></span>
+  <button type="button" class="example2button">example2button</button>
 </div>
 
 <script>
@@ -48,6 +50,8 @@ const data = [
     "class": "class2"
   }
 ];
+simptemp.event.add('.example1button', 'click', () => { console.log('clicked: example1button'); });
+simptemp.event.add('.example2button', 'click', () => { console.log('clicked: example2button'); });
 document.getElementById('execute').addEventListener('click', function(event) {
   let result1 = document.getElementById('result1');
   let template1 = document.getElementById('example-template1');
