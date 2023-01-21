@@ -91,10 +91,10 @@ The difference of the two classes are: template-container remove the root elemen
 * `data-simptemp-key2thishtml="datakey"`: the value of `"datakey": value` is placed as the html element and replaced this element.
 ### data applying
 * `data-simptemp-apply="replace"`: is default, replace the data to any data template has.
-    * if key2text is "example1", apply is "replace" and data is `"example1": "value"`, template `<div ...>foo</div>` become `div ...>value</div>`. 
+    * if key2text is "example1", apply is "replace" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>value</div>`. 
 * `data-simptemp-apply="prepend": prepend the data to the value template has.
-    * if key2text is "example1", apply is "prepend" and data is `"example1": "value"`, template `<div ...>foo</div>` become `div ...>valuefoo</div>`. 
+    * if key2text is "example1", apply is "prepend" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>valuefoo</div>`. 
 * `data-simptemp-apply="append": append the data to the value template has.
-    * if key2text is "example1", apply is "append" and data is `"example1": "value"`, template `<div ...>foo</div>` become `div ...>foovalue</div>`. 
+    * if key2text is "example1", apply is "append" and data is `"example1": "value"`, template `<div ...>foo</div>` become `<div ...>foovalue</div>`. 
 * If you use key2attr and attrname="class" with prepend/append, value are separated with ' ' (a space) and also any order (prepend & append are same).
 
