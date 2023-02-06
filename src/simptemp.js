@@ -30,6 +30,18 @@ const Simptemp = function() {
       container.appendChild(elm);
     }
   };
+  this.inflateAsHtml = function(template, data) {
+    let inflated = this.inflate(template, data);
+    let html = '';
+    for (let elm of inflated) {
+      if (elm instanceof Text) {
+        html += elm.wholeText;
+      } else if (elm instanceof HTMLElement) {
+        html += elm.outerHTML;
+      }
+    }
+    return html;
+  };
 
   this.attrNameBind2Text = 'data-simptemp-key2text';
   this.attrNameBind2Html = 'data-simptemp-key2html';
@@ -37,7 +49,6 @@ const Simptemp = function() {
   this.attrNameBind2ThisText = 'data-simptemp-key2thistext';
   this.attrNameBind2ThisHtml = 'data-simptemp-key2thishtml';
   this.attrNameApply = 'data-simptemp-apply';
-  this.attrNameAttrName = 'data-simptemp-attrname';
 
   this.bindTypeDef = { 'text': 0, 'html': 1, 'attr': 2, 'thistext': 3, 'thishtml': 4 };
   this.applyTypeDef = { 'replace': 0, 'prepend': 1, 'append': 2 };
@@ -57,13 +68,20 @@ const Simptemp = function() {
       this.applyData(this.bindTypeDef.html, elm, key, nodes);
     });
 
-    let selBind2Attr = '[' + this.attrNameBind2Attr + '=' + key + ']';
+    let selBind2Attr = '[' + this.attrNameBind2Attr + ']';
     rootElement.querySelectorAll(selBind2Attr).forEach((elm) => {
-      let attrName = key;
-      if (elm.hasAttribute(this.attrNameAttrName)) {
-        attrName = elm.getAttribute(this.attrNameAttrName);
+      let attrNameMap = {};
+      elm.getAttribute(this.attrNameBind2Attr).split(',').forEach(k => {
+        let pair = k.split(':');
+        let src = pair[0].trim();
+        let dest = (pair.length > 1)? pair[1].trim(): src;
+        if (dest === '') dest = src;
+        if (src !== '') attrNameMap[src] = dest;
+      });
+      if (key in attrNameMap) {
+        let attrName = attrNameMap[key];
+        this.applyData(this.bindTypeDef.attr, elm, attrName, value);
       }
-      this.applyData(this.bindTypeDef.attr, elm, attrName, value);
     });
 
     let selBind2ThisText = '[' + this.attrNameBind2ThisText + '=' + key + ']';

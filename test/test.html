@@ -15,7 +15,7 @@
   <span data-simptemp-key2text="example1"></span>
   <span data-simptemp-key2html="example1"></span>
   <span data-simptemp-key2attr="example2"></span>
-  <span data-simptemp-key2attr="example2" data-simptemp-attrname="attr"></span>
+  <span data-simptemp-key2attr="example1,example2:attr"></span>
   <span data-simptemp-key2thistext="example1"></span>
   <span data-simptemp-key2thishtml="example1"></span>
   <button type="button" class="example1button">example1button</button>
@@ -59,6 +59,8 @@ document.getElementById('execute').addEventListener('click', function(event) {
   let result2 = document.getElementById('result2');
   let template2 = document.getElementById('example-template2');
   simptemp.inflate(template2, data, result2);
+
+  console.log(simptemp.inflateAsHtml(template2, data));
 });
 </script>
 </body>
